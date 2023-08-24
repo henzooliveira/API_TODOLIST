@@ -39,4 +39,40 @@ public class TodoController {
             return ResponseEntity.notFound().build();
         }
     }
+    @PutMapping("/{todoId}/start_task")
+    public ResponseEntity<Todo> startTask(@PathVariable Integer todoId) {
+        Todo todoDatabase = this.todoRepo.findById(todoId).get();
+        if (todoDatabase != null) {
+            todoDatabase.setStatus(StatusEnum.IN_PROGRESS);
+            this.todoRepo.save(todoDatabase);
+            return ResponseEntity.ok(todoDatabase);
+        }else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+    @PutMapping("/{todoId}/end_task")
+    public ResponseEntity<Todo> endtask(@PathVariable Integer todoId){
+        Todo todoDatabase = this.todoRepo.findById(todoId).get();
+        if (todoDatabase!=null) {
+            todoDatabase.setStatus(StatusEnum.FINISHED);
+            this.todoRepo.save(todoDatabase);
+            return ResponseEntity.ok(todoDatabase);
+        }else{
+            return ResponseEntity.notFound().build();
+        }
+    }
+    @PutMapping("/{todoId}")
+    public ResponseEntity<Todo> update(@PathVariable Integer todoId, @RequestBody Todo todo){
+        Todo todoDataBase = this.todoRepo.findById(todoId).get();
+        if (todoDataBase!=null) {
+            todoDataBase.setTitle(todo.getTitle());
+            todoDataBase.setDescription(todo.getDescription());
+            this.todoRepo.save(todoDataBase);
+            return ResponseEntity.ok(todoDataBase);
+        }else{
+            return ResponseEntity.notFound().build();
+        }
+    }
+
 }
+
